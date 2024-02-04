@@ -1,9 +1,11 @@
 #include "StringDataSource.h"
+//Implementations of get, peek, etc from class CStringDataSource in StringDataSource.h
 
-CStringDataSource::CStringDataSource(const std::string &str) : DString(str), DIndex(0){
+//initializing members of constructor from CStringDdataSource
+CStringDataSource::CStringDataSource(const std::string &str) : DString(str), DIndex(0){ 
 
 }
-
+// Returns true if all rows have been read from the DSV
 bool CStringDataSource::End() const noexcept{
     return DIndex >= DString.length();
 }
@@ -24,7 +26,8 @@ bool CStringDataSource::Peek(char &ch) noexcept{
     }
     return false;
 }
-
+// Returns true if the row is successfully read, one string will be put in
+// the row per column
 bool CStringDataSource::Read(std::vector<char> &buf, std::size_t count) noexcept{
     buf.clear();
     while(buf.size() < count){

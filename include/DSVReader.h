@@ -11,7 +11,10 @@ class CDSVReader{
         std::unique_ptr<SImplementation> DImplementation;
 
     public:
+// Constructor for DSV reader, src specifies the data source and delimiter
+// specifies the delimiting character
         CDSVReader(std::shared_ptr< CDataSource > src, char delimiter);
+// Destructor for DSV reader
         ~CDSVReader();
 
         bool End() const;

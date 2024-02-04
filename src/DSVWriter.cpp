@@ -1,40 +1,40 @@
-#include "DSVWriter.h"
-#include "DataSink.h"
-
-struct CDSVWriter::SImplementation {
-    SImplementation(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall) {
-        //Details here
-    }
+// #include "DSVWriter.h"
 
 
-    bool WriteRow(const std::vector<std::string> &row){
-        //Details here
-    }
+// struct CDSVWriter::SImplementation {
+//     SImplementation(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall) {
+//         //Details here
+//     }
 
-};
 
-CDSVWriter::CDSVWriter(std::shared_ptr < CDataSink > sink, char delimiter, bool quoteall){
-    DImplementation(std::make_unique<SImplementation>(sink, delimiter ,quoteall));
-}
+//     bool WriteRow(const std::vector<std::string> &row){
+//         //Details here
+//     }
 
-CDSVWriter::~CDSVWriter(){
+// };
 
-}
+// CDSVWriter::CDSVWriter(std::shared_ptr < CDataSink > sink, char delimiter, bool quoteall){
+//     DImplementation(std::make_unique<SImplementation>(sink, delimiter ,quoteall));
+// }
 
-bool CDSVWriter::WriteRow(const std::vector<std::string> &row){
-    return DImplementation->WriteRow(row);
-}   
+// CDSVWriter::~CDSVWriter(){
 
-class CDSVWriter{
-    private:
-        struct SImplementation
-        std::unique_ptr<SImplementation> DImplementation;
+// }
 
-        public:
-            CDSVWriter(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall = false);
-            ~CDSVWriter();
+// bool CDSVWriter::WriteRow(const std::vector<std::string> &row){
+//     return DImplementation->WriteRow(row);
+// }   
 
-            bool WriteRow(const std::vector<std::string> &row);
-};
+// class CDSVWriter{
+//     private:
+//         struct SImplementation
+//         std::unique_ptr<SImplementation> DImplementation;
 
-#endif
+//         public:
+//             CDSVWriter(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall = false);
+//             ~CDSVWriter();
+
+//             bool WriteRow(const std::vector<std::string> &row);
+// };
+
+// #endif

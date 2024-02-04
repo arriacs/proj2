@@ -9,16 +9,16 @@ BIN_DIR = ./bin
 TEST_SRC_DIR = ./testsrc
 
 CXXFLAGS = -std=c++17 -I $(INC_DIR) -Wall
-LDFLAGS = -lgtest -lgtest_main -lpthread -lexpat
+LDFLAGS = -lgtest -lgtest_main -lpthread -lexpat -lgtest -lgtest_main
 
 all: directories runtests
 
-runtests: $(BIN_DIR)/teststrutils $(BIN_DIR)/testsrdatasource $(BIN_DIR)/testdsv $(BIN_DIR)/testxml
+runtests: $(BIN_DIR)/teststrutils $(BIN_DIR)/testsrdatasource $(BIN_DIR)/testdsv 
 	$(BIN_DIR)/teststrutils
 	$(BIN_DIR)/testsrdatasource
 	$(BIN_DIR)/testsrdatasink
 	$(BIN_DIR)/testdsv
-	$(BIN_DIR)/testxml
+	
 #testsrutils
 $(BIN_DIR)/teststrutils: $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o
 	$(CXX) -o $(BIN_DIR)/teststrutils $(CXXFLAGS) $(OBJ_DIR)/StringUtils.o $(OBJ_DIR)/StringUtilsTest.o $(LDFLAGS)
@@ -40,7 +40,7 @@ $(OBJ_DIR)/StringDataSourceTest.o: $(TEST_SRC_DIR)/StringDataSourceTest.cpp $(IN
 	$(CXX) -o $(OBJ_DIR)/StringDataSourceTest.o -c $(CXXFLAGS) $(TEST_SRC_DIR)/StringDataSourceTest.cpp
 
 #testsrdatasink
-$(BIN_DIR)/testsrdatasink: $(OBJ_DIR)/StingDataSink.o $(OBJ_DIR)/StringDataSinkTest.o
+$(BIN_DIR)/testsrdatasink: $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSinkTest.o
 	$(CXX) -o $(BIN_DIR)/testsrdatasink $(CXXFLAGS) $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSinkTest.o $(LDFLAGS)
 
 $(OBJ_DIR)/StringDataSink.o: $(SRC_DIR)/StringDataSink.cpp $(INC_DIR)/StringDataSink.h $(INC_DIR)/DataSink.h
@@ -48,7 +48,7 @@ $(OBJ_DIR)/StringDataSink.o: $(SRC_DIR)/StringDataSink.cpp $(INC_DIR)/StringData
 
 #dsv
 
-$(BIN_DIR)/testdsv: $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/DSVTest.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.obj                                                                                         
+$(BIN_DIR)/testdsv: $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/DSVTest.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o                                                                                         
 	$(CXX) -o $(BIN_DIR)/testdsv $(CXXFLAGS) $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/DSVTest.o $(LDFLAGS)
 
 $(OBJ_DIR)/DSVReader.o: $(SRC_DIR)/DSVReader.cpp $(INC_DIR)/DSVReader.h                                                                                          

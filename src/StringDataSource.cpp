@@ -6,6 +6,8 @@ CStringDataSource::CStringDataSource(const std::string &str) : DString(str), DIn
 
 }
 // Returns true if all rows have been read from the DSV
+//Double colon "::" used bc we want to use End(), which has already been initialized,
+// so it's out of scope. We access it through the double colon.
 bool CStringDataSource::End() const noexcept{
     return DIndex >= DString.length();
 }
@@ -21,7 +23,7 @@ bool CStringDataSource::Get(char &ch) noexcept{
 
 bool CStringDataSource::Peek(char &ch) noexcept{
     if(DIndex < DString.length()){
-        ch = DString[DIndex];
+        ch = DString[DIndex]; //Peek won't advance to the next character here unless incremented.
         return true;
     }
     return false;

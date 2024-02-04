@@ -5,6 +5,7 @@
 
 class CDataSource{
     public:
+//ALL THESE FUNCTIONS MUST BE OVERRIDDEN (they are overridden in a CDataSource object in StringDataSource.h)
         virtual ~CDataSource(){};
         virtual bool End() const noexcept = 0; //Lets you know your at end of input
         virtual bool Get(char &ch) noexcept = 0;

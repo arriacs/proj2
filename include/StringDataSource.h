@@ -4,6 +4,7 @@
 #include "DataSource.h"
 #include <string>
 
+//CStringDataSource inherits from CDataSource, but they are separate classes
 class CStringDataSource : public CDataSource{
     private:
         std::string DString;

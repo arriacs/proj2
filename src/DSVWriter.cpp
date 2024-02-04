@@ -1,7 +1,7 @@
 #include "DSVWriter.h"
 
 struct CDSVWriter::SImplementation {
-    SImplemntation(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall) {
+    SImplementation(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall) {
         //Details here
     }
 

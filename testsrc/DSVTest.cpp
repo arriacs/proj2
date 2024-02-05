@@ -6,8 +6,9 @@
 #include "DSVReader.h"
 #include "DSVWriter.h"
 
-//READER TEST CASES
+//READER TEST CASES---------------------------------------------------------
 
+//Simplest test case: & delimiter
 TEST(DSVReader, Readrow) {
     auto Source = std::make_shared<CStringDataSource>("Hello&World!");
     CDSVReader Reader(Source, '&');
@@ -19,8 +20,17 @@ TEST(DSVReader, Readrow) {
     EXPECT_EQ(output[1], "World!");
 }
 
+TEST(DSVReader, Readrow) {
+    auto Source = std::make_shared<CStringDataSource>("Hell"o",World!");
+    CDSVReader Reader(Source, ',');
+    std::vector<std::string> output;
 
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 3);
+    EXPECT_EQ(output[0], "Hell"o"");
+    EXPECT_EQ(output[1], "World!");
 
+}
 // TEST(DSVReader, ReadRow) {
 //     // Assuming you have a valid StringDataSource implementation
 //     auto Source = std::make_shared<CStringDataSource>(std::string("Hello&World!\nHello,World!"));
@@ -45,16 +55,19 @@ TEST(DSVReader, Readrow) {
 //     EXPECT_FALSE(Reader.ReadRow(row)); // Reading beyond end
 // }
 
-// TEST(DSVWriter, ExampleTest){
-//     auto Sink = std::make_shared<CStringDataSink>();
-//     CDSVWriter Writer(Sink, '&');
-//     std::vector<std::string> input = {"Hello", "World!"};
+//WRITER TEST CASES -----------------------------------------------------------
 
-//     EXPECT_TRUE(Writer.WriteRow(input));
-//     EXPECT_EQ(Sink->String(), "Hello&World!");
-// }
+//Simplest case #1: & delimiter
+TEST(DSVWriter, Writerow){
+    auto Sink = std::make_shared<CStringDataSink>();
+    CDSVWriter Writer(Sink, '&');
+    std::vector<std::string> input = {"Hello", "World!"};
 
-// TEST(DSVWriter, ExampleTestNewline){
+    EXPECT_TRUE(Writer.WriteRow(input));
+    EXPECT_EQ(Sink->String(), "Hello&World!");
+}
+//case #2: NO
+// TEST(DSVWriter, WritefieldNewline){
 //     auto Sink = std::make_shared<CStringDataSink>();
 //     CDSVWriter Writer(Sink, ',');
 //     std::vector<std::string> input = {"Hello", "World!"};
@@ -81,7 +94,7 @@ TEST(DSVReader, Readrow) {
 //WRITER TEST CASES
 
 
-//& delimiter
+// //& delimiter
 // TEST(DSVWriter, ExampleTest) {
 //     auto Sink = std::make_shared<CStringDataSink>();
 //     CDSVWriter Writer(Sink, '&');

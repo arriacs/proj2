@@ -19,7 +19,7 @@ TEST(DSVReader, Readrow) {
     EXPECT_EQ(output[0], "Hello");
     EXPECT_EQ(output[1], "World!");
 }
-
+//Test Case 2: Quotations inside given string
 TEST(DSVReader, Readrow2) {
     auto Source = std::make_shared<CStringDataSource>("Hello\"o\", World!");
     CDSVReader Reader(Source, ',');
@@ -29,6 +29,15 @@ TEST(DSVReader, Readrow2) {
     ASSERT_EQ(output.size(), 2);
     EXPECT_EQ(output[0], "Hello\"o\"");
     EXPECT_EQ(output[1], " World!");
+}
+//Test Case 3: Readrow returns false (EOF/empty file)
+TEST(DSVReader, Readrow_Failure) {
+    auto Source = std::make_shared<CStringDataSource>("");
+    CDSVReader Reader(Source, ',');
+    std::vector<std::string> output;
+
+    EXPECT_FALSE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 0);  // No successful columns should be read
 }
 
 // TEST(DSVReader, ReadRow) {

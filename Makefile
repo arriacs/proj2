@@ -13,7 +13,7 @@ LDFLAGS = -lgtest -lgtest_main -lpthread -lexpat -lgtest -lgtest_main
 
 all: directories runtests
 
-runtests: $(BIN_DIR)/teststrutils $(BIN_DIR)/testsrdatasource $(BIN_DIR)/testdsv 
+runtests: $(BIN_DIR)/teststrutils $(BIN_DIR)/testsrdatasource $(BIN_DIR)/testsrdatasink $(BIN_DIR)/testdsv 
 	$(BIN_DIR)/teststrutils
 	$(BIN_DIR)/testsrdatasource
 	$(BIN_DIR)/testsrdatasink
@@ -46,7 +46,7 @@ $(BIN_DIR)/testsrdatasink: $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/StringDataSink
 $(OBJ_DIR)/StringDataSink.o: $(SRC_DIR)/StringDataSink.cpp $(INC_DIR)/StringDataSink.h $(INC_DIR)/DataSink.h
 	$(CXX) -o $(OBJ_DIR)/StringDataSink.o -c $(CXXFLAGS) $(SRC_DIR)/StringDataSink.cpp
 
-$(OBJ_DIR)/StringDataSinkTest.o: $(SRC_DIR)/StringDataSinkTest.cpp $(INC_DIR)/StringDataSink.h $(INC_DIR)/DataSink.h
+$(OBJ_DIR)/StringDataSinkTest.o: $(TEST_SRC_DIR)/StringDataSinkTest.cpp $(INC_DIR)/StringDataSink.h $(INC_DIR)/DataSink.h
 	$(CXX) -o $(OBJ_DIR)/StringDataSinkTest.o -c $(CXXFLAGS) $(TEST_SRC_DIR)/StringDataSinkTest.cpp
 
 

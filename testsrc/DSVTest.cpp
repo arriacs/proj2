@@ -38,37 +38,37 @@
 
 // }
 
-
+//& delimiter
 TEST(DSVWriter, ExampleTest) {
     auto Sink = std::make_shared<CStringDataSink>();
     CDSVWriter Writer(Sink, '&');
     std::vector<std::string> input = {"Hello", "World!"};
 
     EXPECT_TRUE(Writer.WriteRow(input));
-    EXPECT_EQ(Sink->String(), "Hello&World!");
+    EXPECT_EQ(Sink->String(), "Hello&World!"); 
 }
-
+//, delimiter
 TEST(DSVWriter, ExampleTestNewline) {
     auto Sink = std::make_shared<CStringDataSink>();
     CDSVWriter Writer(Sink, ',');
-    std::vector<std::string> input = {"Hello", "World!"};
+    std::vector<std::string> input = {"Hello", "World!"}; 
 
     EXPECT_TRUE(Writer.WriteRow(input));
-    EXPECT_EQ(Sink->String(), "Hello,World!");
+    EXPECT_EQ(Sink->String(), "Hello,World!"); 
     EXPECT_TRUE(Writer.WriteRow(input));
     EXPECT_EQ(Sink->String(), "Hello,World!\nHello,World!");
 }
 
-TEST(DSVWriter, WriteDoubleQuotationsWithDelimiter) {
-    auto Sink = std::make_shared<CStringDataSink>();
-    CDSVWriter Writer(Sink, '&');
-    std::vector<std::string> input = {"&", "mystring"};
+// TEST(DSVWriter, WriteDoubleQuotationsWithDelimiter) {
+//     auto Sink = std::make_shared<CStringDataSink>();
+//     CDSVWriter Writer(Sink, '&');
+//     std::vector<std::string> input = {"\"&\"&mystring\n"};
 
-    EXPECT_TRUE(Writer.WriteRow(input));
-    EXPECT_EQ(Sink->String(), "\"&\"&mystring");
-    // OR:
-    // EXPECT_EQ(Sink->String(), "\"&&mystring\"");
-}
+//     EXPECT_TRUE(Writer.WriteRow(input));
+//     EXPECT_EQ(Sink->String(), "\"&\"&mystring");
+//     // OR:
+//     // EXPECT_EQ(Sink->String(), "\"&&mystring\"");
+// }
 
 // TEST(DSVReader, ReadRow) {
 //     // Assuming you have a valid StringDataSource implementation

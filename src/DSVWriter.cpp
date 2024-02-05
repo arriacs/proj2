@@ -1,6 +1,4 @@
 #include "DSVWriter.h"
-#include "StringDataSink.h"
-#include <iostream>
 
 // struct CDSVWriter::SImplementation {
 //     SImplementation(std::shared_ptr< CDataSink > sink, char delimiter, bool quoteall) {
@@ -40,14 +38,41 @@
 
 // #endif
 
+
+// DSVWriter.cpp
+
+
 struct CDSVWriter::SImplementation {
     std::shared_ptr<CDataSink> DSink;
     char DDelimiter;
     bool DQuoteAll;
 
-    SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteAll)
-        : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteAll) {}
+    SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
+        : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {}
 
+    bool WriteRow(const std::vector<std::string> &row) {
+        if (!DSink) {
+            return false;
+        }
+
+        auto it = row.begin();
+        if (it != row.end()) {
+            WriteField(*it);
+            ++it;
+        }
+
+        for (; it != row.end(); ++it) {
+            DSink->Put(DDelimiter);
+            WriteField(*it);
+        }
+
+        // Remove the newline character here
+        // DSink->Put('\n');
+
+        return true;
+    }
+
+private:
     void WriteField(const std::string &field) {
         if (DQuoteAll || field.find(DDelimiter) != std::string::npos || field.find('"') != std::string::npos || field.find('\n') != std::string::npos) {
             DSink->Put('"');
@@ -59,32 +84,21 @@ struct CDSVWriter::SImplementation {
             }
             DSink->Put('"');
         } else {
-            DSink->Write({field.begin(), field.end()});
+            // Change to use Write with std::vector<char> by converting string to vector<char>
+            std::vector<char> fieldVector(field.begin(), field.end());
+            DSink->Write(fieldVector);
         }
     }
 };
 
-CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteAll)
-    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteAll)) {}
+CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
+    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {}
 
 CDSVWriter::~CDSVWriter() {}
 
 bool CDSVWriter::WriteRow(const std::vector<std::string> &row) {
-    if (!DImplementation->DSink) {
-        return false;
-    }
-
-    auto it = row.begin();
-    if (it != row.end()) {
-        DImplementation->WriteField(*it);
-        ++it;
-    }
-
-    for (; it != row.end(); ++it) {
-        DImplementation->DSink->Put(DImplementation->DDelimiter);
-        DImplementation->WriteField(*it);
-    }
-
-    DImplementation->DSink->Put('\n');
-    return true;
+    return DImplementation->WriteRow(row);
 }
+
+
+

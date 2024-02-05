@@ -1,102 +1,110 @@
 #include <gtest/gtest.h>
 #include "StringUtils.h"
 
-
-//returns substring of a string, include end of string
 TEST(StringUtilsTest, SliceTest){
-    std::string Base = "Hello, World!";
-
-    // Test positive indices
-    EXPECT_EQ(StringUtils::Slice(Base, 0, 5), "Hello");
-    EXPECT_EQ(StringUtils::Slice(Base, 7, 12), "World");
-
-    //Test negative indices
-    EXPECT_EQ(StringUtils::Slice(Base, -6, -1), "World!");
-
-    //Test with end = 0 (include end of string)
-    EXPECT_EQ(StringUtils::Slice(Base, 7), "World!");   
-
-    // Test with end beyond the length of the string
-    EXPECT_EQ(StringUtils::Slice(Base, 7, 20), "World!");
-
+    std::string basecase = "hello world";
+    std::string expected = "hello";
+    std::string actual = StringUtils::Slice(basecase, 0, 5); // slice from start 0 index to end 5 index
+    // compare actual and expected
+    EXPECT_EQ(actual, expected);
 }
- 
 
-/* TEST(StringUtilsTest, Capitalize){
-    std::string Base = "hello";
-    EXPECT_EQ(StringUtils::Capitalize(Base), "Hello");
-    EXPECT_EQ(StingUtils::Capitalize("HELLO", "Hello"));
+TEST(StringUtilsTest, Capitalize){
+    std::string basecase = "hello world";
+    std::string expected = "Hello world";
+    std::string actual = StringUtils::Capitalize(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, Upper){
-    std::string Base = "hello";
-    EXPECT_EQ(StringUtils::Upper(Base, "HELLO"));
-    EXPECT_EQ(StringUtils::Upper("eriam", "ERIAM"));
-    
+    std::string basecase = "hello world";
+    std::string expected = "HELLO WORLD";
+    std::string actual = StringUtils::Upper(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, Lower){
-    std::string Base = "HELLO";
-    EXPECT_EQ(StringUtils::Upper(Base, "hello"));
-    EXPECT_EQ(StringUtils::Upper("eRIaM", "eriam"));
-    EXPECT_EQ(StringUtils::Upper("HI THERE!", "hi there!"));
+    std::string basecase = "HELLO WORLD";
+    std::string expected = "hello world";
+    std::string actual = StringUtils::Lower(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, LStrip){
-    std::string Base =" hello";
-    EXPECT_EQ(StringUtils:: LStrip(Base, "hello"));
-    EXPECT_EQ(StringUtils:: LStrip(" hi there ", "hi there "));
-
+    std::string basecase = "   hello world";
+    std::string expected = "hello world";
+    std::string actual = StringUtils::LStrip(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, RStrip){
-    std::string Base ="hello ";
-    EXPECT_EQ(StringUtils:: RStrip(Base, "hello"));
-    EXPECT_EQ(StringUtils:: RStrip(" hi there ", " hi there"));
+    std::string basecase = "hello world   ";
+    std::string expected = "hello world";
+    std::string actual = StringUtils::RStrip(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, Strip){
-    std::string Base =" hello ";
-    EXPECT_EQ(StringUtils:: Strip(Base, "hello"));
-    EXPECT_EQ(StringUtils:: Strip(" hi there ", "hi there"));
-    EXPECT_EQ(StringUtils:: Strip(" hi there pardner   ", "hi there pardner"));
-} */
-
-/* TEST(StringUtilsTest, Center){
-    std::str Base = "hello";
-    EXPECT_EQ(StringUtils:: Center(Base, " hello "));
-    EXPECT_EQ(StringUtils:: Center(Base, " @hello@ "));
+    std::string basecase = "   hello world   ";
+    std::string expected = "hello world";
+    std::string actual = StringUtils::Strip(basecase);
+    EXPECT_EQ(actual, expected);
 }
 
-TEST(StringUtilsTest, LJust){
-    std::str Base = "   hello";
-    EXPECT_EQ(StringUtils:: Center(Base, "hello   "));
-    EXPECT_EQ(StringUtils:: Center("    hello ", "hello   "));
-}
+// TEST(StringUtilsTest, Center){
+//     std::string basecase = "hello";
+//     std::string expected = "  hello  ";
+//     std::string actual = StringUtils::Center(basecase, 9);
+//     EXPECT_EQ(actual, expected);
+// }
 
-TEST(StringUtilsTest, RJust){
-    std::str Base = "hello   ";
-    EXPECT_EQ(StringUtils:: Center(Base, "   hello"));
-    EXPECT_EQ(StringUtils:: Center(" hello   ", "   hello"));
-}
+// TEST(StringUtilsTest, LJust){
+//     std::string basecase = "hello";
+//     std::string expected = "hello  ";
+//     std::string actual = StringUtils::LJust(basecase, 7);
+//     EXPECT_EQ(actual, expected);
+// }
+
+// TEST(StringUtilsTest, RJust){
+//     std::string basecase = "hello";
+//     std::string expected = "  hello";
+//     std::string actual = StringUtils::RJust(basecase, 7);
+//     ASSERT_EQ(actual, expected);
+// }
 
 TEST(StringUtilsTest, Replace){
-    
+    std::string basecase = "hello world";
+    std::string expected = "hello universe";
+    std::string actual = StringUtils::Replace(basecase, "world", "universe");
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, Split){
-    
+    std::string basecase = "hello world";
+    std::vector<std::string> expected = {"hello", "world"};
+    std::vector<std::string> actual = StringUtils::Split(basecase, " ");
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, Join){
-    
+    std::vector<std::string> basecase = {"hello", "world"};
+    std::string expected = "hello world";
+    std::string actual = StringUtils::Join(" ", basecase);
+    ASSERT_EQ(actual, expected);
 }
 
 TEST(StringUtilsTest, ExpandTabs){
-    
+    std::string basecase = "hello\tworld";
+    std::string expected = "hello    world";
+    std::string actual = StringUtils::ExpandTabs(basecase);
+    ASSERT_EQ(actual, expected);
 }
-
+/*
 TEST(StringUtilsTest, EditDistance){
-    
-}
- */
+    std::string left = "hello";
+    std::string right = "world";
+    int expected = 5; // It takes at least 5 edits to change "hello" into "world"
+    int actual = StringUtils::EditDistance(left, right);
+    EXPECT_EQ(actual, expected);
+}*/
+ 

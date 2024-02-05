@@ -20,17 +20,17 @@ TEST(DSVReader, Readrow) {
     EXPECT_EQ(output[1], "World!");
 }
 
-TEST(DSVReader, Readrow) {
-    auto Source = std::make_shared<CStringDataSource>("Hell"o",World!");
+TEST(DSVReader, Readrow2) {
+    auto Source = std::make_shared<CStringDataSource>("Hello\"o\", World!");
     CDSVReader Reader(Source, ',');
     std::vector<std::string> output;
 
     EXPECT_TRUE(Reader.ReadRow(output));
-    ASSERT_EQ(output.size(), 3);
-    EXPECT_EQ(output[0], "Hell"o"");
-    EXPECT_EQ(output[1], "World!");
-
+    ASSERT_EQ(output.size(), 2);
+    EXPECT_EQ(output[0], "Hello\"o\"");
+    EXPECT_EQ(output[1], " World!");
 }
+
 // TEST(DSVReader, ReadRow) {
 //     // Assuming you have a valid StringDataSource implementation
 //     auto Source = std::make_shared<CStringDataSource>(std::string("Hello&World!\nHello,World!"));

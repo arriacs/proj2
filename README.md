@@ -630,3 +630,15 @@ These modifications ensure that `StringDataSource.cpp` is compiled and linked pr
 
 Added StringDataSource.h dependency to DSVTest in Makefile so that it could link CStringDataSource...
 Makefile became functionally complete for DSVReader
+
+## Q 8 - Microsoft CoPilot
+
+do the backslashes in this context help to represent a double quote: auto Source = std::make_shared<CStringDataSource>("Hello\"o\", World!");
+
+## Ans 8
+
+Yes, the backslashes in this context are used to escape the double quote character ("). In C++, when you want to include a double quote within a string literal (like "Hello\"o\", World!"), you need to escape it by preceding it with a backslash (\). This way, the compiler knows that the double quote is part of the string content and not the end of the string itself. So, the resulting string will be: “Hello"o", World!”.
+
+## Change 8
+
+Changed reader test case to include backslashes for representing double quotes

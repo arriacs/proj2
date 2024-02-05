@@ -39,9 +39,6 @@
 // #endif
 
 
-// DSVWriter.cpp
-
-
 struct CDSVWriter::SImplementation {
     std::shared_ptr<CDataSink> DSink;
     char DDelimiter;
@@ -51,25 +48,22 @@ struct CDSVWriter::SImplementation {
         : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {}
 
     bool WriteRow(const std::vector<std::string> &row) {
-        if (!DSink) {
+        if (!DSink) { //if no class obj
             return false;
         }
 
-        auto it = row.begin();
+        auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row'
         if (it != row.end()) {
-            WriteField(*it);
-            ++it;
+            WriteField(*it); //if not at end of line, WriteField func writes the element
+            ++it; //inc iterator
         }
 
-        for (; it != row.end(); ++it) {
-            DSink->Put(DDelimiter);
-            WriteField(*it);
+        for (; it != row.end(); ++it) { //empty init statement, it has already been declared
+            DSink->Put(DDelimiter); //uses Put() to apply delim to input
+            WriteField(*it); //separating each field in the row
         }
 
-        // Remove the newline character here
-        // DSink->Put('\n');
-
-        return true;
+        return true; //func was successful
     }
 
 private:

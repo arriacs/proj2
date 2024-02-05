@@ -437,4 +437,196 @@ Allowed me to understand how to use Dsink, such as in my Writer.cpp file to chec
  if (!DSink)
 
  ## Q7
- 
+
+ here is StringDataSource.cpp, but I don't want to edit this or the .h files, so help me fix it by only modifying DSVTest.cpp, the Makefile, or DSVReader.cpp. There's no CStringDataSource.h file, just StringDataSource.h that has CStringDataSource
+
+#include "StringDataSource.h"
+//Implementations of get, peek, etc from class CStringDataSource in StringDataSource.h
+
+//initializing members of constructor from CStringDdataSource
+CStringDataSource::CStringDataSource(const std::string &str) : DString(str), DIndex(0){ 
+
+}
+// Returns true if all rows have been read from the DSV
+//Double colon "::" used bc we want to use End(), which has already been initialized,
+// so it's out of scope. We access it through the double colon.
+bool CStringDataSource::End() const noexcept{
+    return DIndex >= DString.length();
+}
+
+bool CStringDataSource::Get(char &ch) noexcept{
+    if(DIndex < DString.length()){
+        ch = DString[DIndex];
+        DIndex++;
+        return true;
+    }
+    return false;
+}
+
+bool CStringDataSource::Peek(char &ch) noexcept{
+    if(DIndex < DString.length()){
+        ch = DString[DIndex]; //Peek won't advance to the next character here unless incremented.
+        return true;
+    }
+    return false;
+}
+// Returns true if the row is successfully read, one string will be put in
+// the row per column
+bool CStringDataSource::Read(std::vector<char> &buf, std::size_t count) noexcept{
+    buf.clear();
+    while(buf.size() < count){
+        char TempChar;
+        if(Get(TempChar)){
+            buf.push_back(TempChar);
+        }
+        else{
+            break;
+        }
+    }
+    return !buf.empty();
+}
+
+
+DSVTest.cpp: 
+
+#include <gtest/gtest.h>
+#include <memory>
+#include <vector>
+#include "StringDataSink.h"
+#include "StringDataSource.h"
+#include "DSVReader.h"
+#include "DSVWriter.h"
+
+//READER TEST CASES
+
+TEST(DSVReader, Readrow) {
+    auto Source = std::make_shared<CStringDataSource>("Hello&World!");
+    CDSVReader Reader(Source, '&');
+    std::vector<std::string> output;
+
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 2);
+    EXPECT_EQ(output[0], "Hello");
+    EXPECT_EQ(output[1], "World!");
+}
+
+DSVReader.cpp: 
+
+#include "DSVReader.h"
+
+struct CDSVReader::SImplementation {
+    std::shared_ptr<CDataSource> DSource;
+    char DDelimiter;
+
+    SImplementation(std::shared_ptr<CDataSource> src, char delimiter)
+        : DSource(src), DDelimiter(delimiter) {}
+
+    bool End() const {
+        return DSource->End();
+    }
+
+    bool ReadRow(std::vector<std::string> &row) {
+        row.clear();
+        std::string field;
+
+        char ch;
+        while (DSource->Get(ch)) {
+            if (ch == DDelimiter) {
+                row.push_back(field);
+                field.clear();
+            } else if (ch == '\n') {
+                row.push_back(field);
+                return true; // End of row
+            } else {
+                field += ch;
+            }
+        }
+
+        if (!field.empty()) {
+            row.push_back(field);
+            return true; // End of row
+        }
+
+        return false; // End of file
+    }
+};
+
+CDSVReader::CDSVReader(std::shared_ptr<CDataSource> src, char delimiter)
+    : DImplementation(std::make_unique<SImplementation>(src, delimiter)) {}
+
+CDSVReader::~CDSVReader() {}
+
+bool CDSVReader::End() const {
+    return DImplementation->End();
+}
+
+bool CDSVReader::ReadRow(std::vector<std::string> &row) {
+    return DImplementation->ReadRow(row);
+}
+
+DataSource.h:
+
+#ifndef DATASOURCE_H
+#define DATASOURCE_H
+
+#include <vector>
+
+class CDataSource{
+    public:
+//ALL THESE FUNCTIONS MUST BE OVERRIDDEN (they are overridden in a CDataSource object in StringDataSource.h)
+        virtual ~CDataSource(){};
+        virtual bool End() const noexcept = 0; //Lets you know your at end of input
+        virtual bool Get(char &ch) noexcept = 0;
+        virtual bool Peek(char &ch) noexcept = 0; /*can get next char w/o pulling it out of source.. helpful for finding out if your at the end of 
+        the string (what if there are double quotes?)*/
+        virtual bool Read(std::vector<char> &buf, std::size_t count) noexcept = 0; //Give how many chars you want to read
+        //helpful when doing xml reader
+        
+};
+
+#endif
+
+
+## Ans 7
+
+Thank you for providing additional details. Given your constraint to avoid modifying `StringDataSource.h` and `StringDataSource.cpp`, and assuming `CStringDataSource` is correctly implemented in `StringDataSource.cpp`, let's make sure `DSVTest.cpp` and `DSVReader.cpp` are correctly using `CStringDataSource`. 
+
+If `CStringDataSource` is implemented in `StringDataSource.cpp`, make sure to include the necessary header in `DSVTest.cpp`. Also, modify the Makefile to include `StringDataSource.o` when building `testdsv`. Here are the modifications:
+
+### DSVTest.cpp:
+
+```cpp
+#include <gtest/gtest.h>
+#include <memory>
+#include <vector>
+#include "StringDataSource.h"  // Include the necessary header
+#include "StringDataSink.h"
+#include "DSVReader.h"
+#include "DSVWriter.h"
+
+// ...
+
+```
+
+### Makefile:
+
+Add a rule to compile `StringDataSource.cpp`:
+
+```make
+$(OBJ_DIR)/StringDataSource.o: $(SRC_DIR)/StringDataSource.cpp $(INC_DIR)/StringDataSource.h $(INC_DIR)/DataSource.h
+    $(CXX) -o $(OBJ_DIR)/StringDataSource.o -c $(CXXFLAGS) $(SRC_DIR)/StringDataSource.cpp
+```
+
+Include `StringDataSource.o` in the dependency list for `testdsv`:
+
+```make
+$(BIN_DIR)/testdsv: $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/DSVTest.o                                                                                       
+    $(CXX) -o $(BIN_DIR)/testdsv $(CXXFLAGS) $(OBJ_DIR)/DSVReader.o $(OBJ_DIR)/DSVWriter.o $(OBJ_DIR)/StringDataSource.o $(OBJ_DIR)/StringDataSink.o $(OBJ_DIR)/DSVTest.o $(LDFLAGS)
+```
+
+These modifications ensure that `StringDataSource.cpp` is compiled and linked properly when building `testdsv`. If you encounter any issues, please let me know, and we can further refine the solution.
+
+## Change 7
+
+Added StringDataSource.h dependency to DSVTest in Makefile so that it could link CStringDataSource...
+Makefile became functionally complete for DSVReader

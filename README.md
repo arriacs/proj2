@@ -218,3 +218,223 @@ You might want to uncomment that line to ensure that a newline character is adde
 ## Changes 3
 
 I didn't uncomment that line since I wasn't sure if it was actually correct or not, so just continued to work on tests that involved newlines
+
+## Q4
+
+what does an empty semicolon mean in a for loop
+
+## Ans 4
+
+An empty semicolon in a for loop in C++ is used to omit the initialization or condition or the update part of the loop. This can be done when you want to skip one or more of these parts.
+
+The general syntax of a for loop is:
+
+```cpp
+for (initialization; condition; update) {
+    // loop body
+}
+```
+
+However, any of these three parts can be omitted, and an empty semicolon is used as a placeholder.
+
+Here are a few examples:
+
+1. **Omitting Initialization:**
+   ```cpp
+   int i = 0;
+   for (; i < 5; ++i) {
+       // loop body
+   }
+   ```
+   In this example, the initialization part is done outside the loop, and the loop starts with an empty semicolon.
+
+2. **Omitting Condition:**
+   ```cpp
+   int i = 0;
+   for (; ; ++i) {
+       // loop body
+       if (i >= 5)
+           break;
+   }
+   ```
+   Here, the condition is omitted, and it relies on a break statement inside the loop to exit when `i` reaches a certain value.
+
+3. **Omitting Update:**
+   ```cpp
+   for (int i = 0; i < 5; ) {
+       // loop body
+       ++i; // update done inside the loop body
+   }
+   ```
+   In this case, the update part is omitted from the for loop, and the variable `i` is updated inside the loop body.
+
+While using empty semicolons can be a valid way to structure a for loop, it's important to ensure that the loop still behaves as intended and doesn't lead to confusing or error-prone code. In many cases, it's clearer to include all three parts for better readability and maintainability.
+
+## Change 4
+
+Used semi colon to skip re-initiation in my WriteRow for loop
+
+## Q 5
+
+class CStringDataSink : public CDataSink{
+    private:
+        std::string DString;
+    public:
+        const std::string &String() const; //can put chars into it and use this to find out what chars you put into it
+
+        bool Put(const char &ch) noexcept override;
+        bool Write(const std::vector<char> &buf) noexcept override;
+};
+
+#endif
+
+#include "StringDataSink.h"
+
+const std::string &CStringDataSink::String() const{
+    return DString;
+}
+
+bool CStringDataSink::Put(const char &ch) noexcept{
+    DString += std::string(1,ch);
+    return true;
+}
+// Returns true if the row is successfully written, one string per column
+// should be put in the row vector
+bool CStringDataSink::Write(const std::vector<char> &buf) noexcept{
+    DString += std::string(buf.data(),buf.size());
+    return true;
+}
+
+explain how these different files create the CDataSink object and how stuff is "written " to it. 
+
+## Ans 5
+
+Let's break down the provided code into parts to understand how the `CStringDataSink` class, which is derived from `CDataSink`, is implemented and how it handles writing data.
+
+1. **Header File (StringDataSink.h):**
+```cpp
+// StringDataSink.h
+
+#ifndef STRING_DATA_SINK_H
+#define STRING_DATA_SINK_H
+
+#include "DataSink.h" // Assume CDataSink is defined in DataSink.h
+
+class CStringDataSink : public CDataSink {
+private:
+    std::string DString;
+
+public:
+    const std::string &String() const;
+    bool Put(const char &ch) noexcept override;
+    bool Write(const std::vector<char> &buf) noexcept override;
+};
+
+#endif
+```
+
+This header file declares the `CStringDataSink` class, which inherits from `CDataSink`. It also declares member functions for getting the content of the string (`String()`), putting a character into the sink (`Put`), and writing a vector of characters into the sink (`Write`).
+
+2. **Implementation File (StringDataSink.cpp):**
+```cpp
+// StringDataSink.cpp
+
+#include "StringDataSink.h"
+
+const std::string &CStringDataSink::String() const {
+    return DString;
+}
+
+bool CStringDataSink::Put(const char &ch) noexcept {
+    DString += std::string(1, ch);
+    return true;
+}
+
+bool CStringDataSink::Write(const std::vector<char> &buf) noexcept {
+    DString += std::string(buf.data(), buf.size());
+    return true;
+}
+```
+
+This implementation file defines the member functions declared in the header file. 
+
+- `String()` returns a constant reference to the internal string `DString`.
+- `Put` appends a single character to `DString`.
+- `Write` appends a vector of characters to `DString`.
+
+These functions update the `DString` member variable with the provided characters.
+
+3. **Usage in CDSVWriter:**
+```cpp
+// Assume CDSVWriter.cpp includes CStringDataSink.h
+
+#include "StringDataSink.h"
+
+// Some code...
+
+std::shared_ptr<CDataSink> sink = std::make_shared<CStringDataSink>();
+CDSVWriter csvWriter(sink, ',', true);
+
+// WriteRow example:
+std::vector<std::string> row = {"Column1", "Column2", "Column3"};
+csvWriter.WriteRow(row);
+
+// Accessing the content of CStringDataSink:
+const std::string &outputString = dynamic_cast<CStringDataSink *>(sink.get())->String();
+```
+
+In this example, an instance of `CStringDataSink` is created using `std::make_shared<CStringDataSink>()`, and it is passed as an argument to the constructor of `CDSVWriter`. The `WriteRow` function of `CDSVWriter` is then used to write a row of strings.
+
+After the writing operation, you can access the content of `CStringDataSink` using the `String()` function. Note that `dynamic_cast` is used here because the `sink` is of type `std::shared_ptr<CDataSink>`, but we want to access the specific functionality provided by `CStringDataSink`. 
+
+This way, the `CStringDataSink` class acts as a destination for the data written by `CDSVWriter`. The content of the sink can be retrieved using the `String()` function.
+
+## Change 5
+
+Answer helped me understand what the sink CDataString actually is 
+
+## Q 6
+
+so does the variable DString actually hold the output contents, making it the sink?
+
+## Ans 6
+
+Yes, that's correct. In the `CStringDataSink` class, the private member variable `DString` is used to hold the output contents, making it function as the sink for the data being written. The `CStringDataSink` class is essentially a simple sink that accumulates the characters and strings written to it, storing them in the `DString` member variable.
+
+Here's a breakdown of how `DString` serves as the sink:
+
+1. **`Put` Function:**
+   ```cpp
+   bool CStringDataSink::Put(const char &ch) noexcept {
+       DString += std::string(1, ch);
+       return true;
+   }
+   ```
+   The `Put` function appends a single character to the `DString`. This function is part of the `CDataSink` interface, and it's overridden in `CStringDataSink` to define how characters are added to the sink.
+
+2. **`Write` Function:**
+   ```cpp
+   bool CStringDataSink::Write(const std::vector<char> &buf) noexcept {
+       DString += std::string(buf.data(), buf.size());
+       return true;
+   }
+   ```
+   The `Write` function appends a vector of characters to the `DString`. Similar to `Put`, this function is part of the `CDataSink` interface, and it's implemented in `CStringDataSink` to handle the case where multiple characters are written at once.
+
+3. **`String` Function:**
+   ```cpp
+   const std::string &CStringDataSink::String() const {
+       return DString;
+   }
+   ```
+   The `String` function provides read-only access to the contents of the sink (`DString`). This allows external code to inspect the accumulated output.
+
+In summary, the `DString` member variable holds the output contents, making it the sink for the data being written by the `CDSVWriter` or any other code using this sink. It's a simple example of a sink that accumulates data, and in a real-world scenario, a sink might involve more complex operations like writing to files, databases, or network streams.
+
+## Change 6
+
+Allowed me to understand how to use Dsink, such as in my Writer.cpp file to check if the shared pointer was point to it.
+ if (!DSink)
+
+ ## Q7
+ 

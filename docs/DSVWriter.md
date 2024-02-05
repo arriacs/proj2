@@ -8,10 +8,10 @@ struct CDSVWriter::SImplementation {
 };
 
 
-
+## sink
 std::shared_ptr<CDataSink> sink: A shared pointer to a CDataSink object.
 
-
+## WriteRow() 
 bool WriteRow(const std::vector<std::string> &row) 
 
 Writes a row of data to a data sink given a specified delimiter.
@@ -24,3 +24,7 @@ Parameters: const std::vector<std::string> &row
     This parameter is a constant reference to a vector of strings
 Return value: bool
 
+## WriteField()
+ void WriteField(const std::string &field)
+
+Purpose: To write a string to an output sink (DSink), which is a shared pointer to a CDataSink object (and where the data will be stored).

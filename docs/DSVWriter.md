@@ -27,4 +27,25 @@ Return value: bool
 ## WriteField()
  void WriteField(const std::string &field)
 
-Purpose: To write a string to an output sink (DSink), which is a shared pointer to a CDataSink object (and where the data will be stored).
+Purpose: To write a string (field) to an output sink (DSink), which is a shared pointer to a CDataSink object (and where the data will be stored). It also handles nuanced special cases with certain char's.
+
+1) if (DQuoteAll || field.find(DDelimiter) != std::string::npos || field.find('"') != std::string::npos || field.find('\n') != std::string::npos) 
+
+If any of the above conditions are met, the field needs to be quoted.
+If quoting is required, the func starts by putting a double quote into the data sink (DSink). A
+
+A 'for' loop is then called, checking if additional quotations are run into. If they are double quotes are added to the sink. The purpose is not to confuse a double quote describing the beginning or ending of the string, but recognize that it is part of the input.
+
+A closing quote is added into the data sink to end the process.
+
+2) Else statement
+
+Purpose: used when input doesn't require quoting
+A vector is created by copying the characters from the field string using the begin() and end() functions.
+The Write function is called to write the vector to DSink.
+
+## Constructor CDSVWriter
+CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
+    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {}
+
+Purpose: Create an instance of SImplementation as to leave this stuct untouched

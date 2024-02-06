@@ -3,11 +3,13 @@
 struct CDSVWriter::SImplementation {
     std::shared_ptr<CDataSink> DSink;
     char DDelimiter;
-    bool DQuoteAll;
+    bool DQuoteAll; //bool flag
 
+//initializes above var's w provided args
     SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
         : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {}
 
+//Writes row of data to data sink
     bool WriteRow(const std::vector<std::string> &row) {
         if (!DSink) { //if no class obj
             return false;
@@ -27,7 +29,7 @@ struct CDSVWriter::SImplementation {
         return true; //func was successful
     }
 
-private:
+private: //writes a single field (string) to data sink
     void WriteField(const std::string &field) {
         if (DQuoteAll || field.find(DDelimiter) != std::string::npos || field.find('"') != std::string::npos || field.find('\n') != std::string::npos) {
             DSink->Put('"');

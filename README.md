@@ -643,3 +643,34 @@ Yes, the backslashes in this context are used to escape the double quote charact
 ## Change 8
 
 Changed reader test case to include backslashes for representing double quotes
+
+## Q9
+
+CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
+    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {}
+what is SImplementation
+
+## Ans 9
+
+In the provided code, `SImplementation` is a private implementation structure within the `CDSVWriter` class. It's a common technique used for encapsulating the internal details of a class and separating its interface from its implementation. The `SImplementation` structure contains the actual implementation details and private members of the `CDSVWriter` class.
+
+Here's a brief breakdown of how it works:
+
+```cpp
+struct CDSVWriter::SImplementation {
+    // ... (details not shown in your provided snippet)
+};
+
+CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
+    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {}
+```
+
+- **`SImplementation`**: This is a nested structure inside the `CDSVWriter` class. It holds private members and methods that are used to implement the functionality of the `CDSVWriter` class.
+
+- **`CDSVWriter::CDSVWriter` (constructor)**: The constructor initializes the `CDSVWriter` object. It takes parameters such as a shared pointer to a `CDataSink`, a delimiter character, and a boolean flag `quoteall`. The key part is that it creates an instance of the `SImplementation` structure using `std::make_unique` and passes the constructor parameters to it. This `SImplementation` object is stored as a member of the `CDSVWriter` class.
+
+By using this private implementation (`SImplementation`), the internal details of how `CDSVWriter` interacts with the data sink and performs CSV writing operations are hidden from the users of the `CDSVWriter` class. This encapsulation helps in maintaining a cleaner interface and allows for easier changes to the implementation without affecting the public interface of the class. It's a common design pattern known as the Pimpl idiom (Pointer to IMPLementation).
+
+## Change 9
+
+Added more detailed explanantion of DImplementation to .md files

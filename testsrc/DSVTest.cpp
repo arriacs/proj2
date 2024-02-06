@@ -20,7 +20,7 @@ TEST(DSVReader, Readrow) {
     EXPECT_EQ(output[1], "World!");
 }
 //Test Case 2: Quotations inside given string
-TEST(DSVReader, Readrow2) {
+TEST(DSVReader, Readrow_DoubleQuote) {
     auto Source = std::make_shared<CStringDataSource>("Hello\"o\", World!");
     CDSVReader Reader(Source, ',');
     std::vector<std::string> output;
@@ -40,29 +40,31 @@ TEST(DSVReader, Readrow_Failure) {
     ASSERT_EQ(output.size(), 0);  // No successful columns should be read
 }
 
-// TEST(DSVReader, ReadRow) {
-//     // Assuming you have a valid StringDataSource implementation
-//     auto Source = std::make_shared<CStringDataSource>(std::string("Hello&World!\nHello,World!"));
+// Test Case 4: Newlines
+TEST(DSVReader, Readrow_Newline) {
+    auto Source = std::make_shared<CStringDataSource>("Hello\nWorld");
+    CDSVReader Reader(Source, ',');
+    std::vector<std::string> output;
+
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 1);
+    EXPECT_EQ(output[0], "World");
+}
+
+//Test Case 5: More Newlines + Delimiter input
+TEST(DSVReader, Readrow_Newline2) {
+    auto Source = std::make_shared<CStringDataSource>("Name&ID\nPEGGY&100");
+    CDSVReader Reader(Source, '&');
+    std::vector<std::string> output;
+
+//Second row/vector is the only one getting output
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 2);
+    EXPECT_EQ(output[0], "PEGGY");
+    EXPECT_EQ(output[1], "100");
+}
 
 
-//     CDSVReader Reader(Source, ',');
-//     std::vector<std::string> row;
-
-//     EXPECT_FALSE(Reader.End());
-//     EXPECT_TRUE(Reader.ReadRow(row));
-//     EXPECT_EQ(row.size(), 2);
-//     EXPECT_EQ(row[0], "Hello");
-//     EXPECT_EQ(row[1], "World!");
-
-//     EXPECT_FALSE(Reader.End());
-//     EXPECT_TRUE(Reader.ReadRow(row));
-//     EXPECT_EQ(row.size(), 2);
-//     EXPECT_EQ(row[0], "Hello");
-//     EXPECT_EQ(row[1], "World!");
-
-//     EXPECT_TRUE(Reader.End());
-//     EXPECT_FALSE(Reader.ReadRow(row)); // Reading beyond end
-// }
 
 //WRITER TEST CASES -----------------------------------------------------------
 

@@ -16,6 +16,14 @@ DSVWriter... only pass the basic test
 
 ## Code References 
 
+## Reference 1
+
+@162 on Piazza
+https://piazza.com/class/lr7arf6lzfb3fp/post/162
+
+## Changes 1 
+
+Used example test case as it involved the newline character
 
 ## Generative AI Use
 

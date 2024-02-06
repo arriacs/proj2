@@ -11,7 +11,8 @@ have attempted DSVReader but isn't working
 
 ## Known Issues
 
-Implementing DSVReader... unsure of where to start
+Implementing DSVReader... newline test cases 
+DSVWriter... only pass the basic test
 
 ## Code References 
 

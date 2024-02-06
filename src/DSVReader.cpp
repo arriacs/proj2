@@ -49,3 +49,7 @@ bool CDSVReader::End() const {
 bool CDSVReader::ReadRow(std::vector<std::string> &row) {
     return DImplementation->ReadRow(row);
 }
+
+
+
+

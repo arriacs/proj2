@@ -1,7 +1,7 @@
 #include "DSVWriter.h"
 
 struct CDSVWriter::SImplementation {
-    std::shared_ptr<CDataSink> DSink;
+    std::shared_ptr<CDataSink> DSink; //shared pointer DSink of type CDataSink
     char DDelimiter;
     bool DQuoteAll; //bool flag
 
@@ -10,14 +10,14 @@ struct CDSVWriter::SImplementation {
         : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {}
 
 //Writes row of data to data sink
-    bool WriteRow(const std::vector<std::string> &row) {
+    bool WriteRow(const std::vector<std::string> &row) { //takes the row read from ReadRow
         if (!DSink) { //if no class obj
             return false;
         }
 
-        auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row'
+        auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row' from ReadRow
         if (it != row.end()) {
-            WriteField(*it); //if not at end of line, WriteField func writes the element
+            WriteField(*it); //if not at end of line, WriteField func writes the element (the value it points to)
             ++it; //inc iterator
         }
 

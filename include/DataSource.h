@@ -2,7 +2,7 @@
 #define DATASOURCE_H
 
 #include <vector>
-
+//The functions of this class are defined in the constructor in StringDataSource.cpp
 class CDataSource{
     public:
 //ALL THESE FUNCTIONS MUST BE OVERRIDDEN (they are overridden in a CDataSource object in StringDataSource.h)
@@ -17,3 +17,4 @@ class CDataSource{
 };
 
 #endif
+ 

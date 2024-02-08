@@ -16,8 +16,8 @@ struct CDSVWriter::SImplementation {
         }
 
         auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row' from ReadRow
-        if (it != row.end()) {
-            WriteField(*it); //if not at end of line, WriteField func writes the element (the value it points to)
+        if (it != row.end()) { //writing row to the sink Writefield
+            WriteField(*it); //if not at end of line, WriteField takes the it variable which contains the row string
             ++it; //inc iterator
         }
 
@@ -30,31 +30,31 @@ struct CDSVWriter::SImplementation {
     }
 
 private: //writes a single field (string) to data sink
-    void WriteField(const std::string &field) {
+    void WriteField(const std::string &field) { //refernce to field (actual object, not copy) //npos = position in the string
         if (DQuoteAll || field.find(DDelimiter) != std::string::npos || field.find('"') != std::string::npos || field.find('\n') != std::string::npos) {
             DSink->Put('"');
             for (char ch : field) {
                 if (ch == '"') {
-                    DSink->Put('"');
+                    DSink->Put('"'); //put quotes around char's in the field if it's the double quote char
                 }
-                DSink->Put(ch);
+                DSink->Put(ch); //put char in DSink
             }
-            DSink->Put('"');
+            DSink->Put('"'); //second quote encapsulating the ch double quote
         } else {
             // Change to use Write with std::vector<char> by converting string to vector<char>
             std::vector<char> fieldVector(field.begin(), field.end());
-            DSink->Write(fieldVector);
+            DSink->Write(fieldVector); //write data from field to fieldVector, which is of the vector class (Dsink accesses the Write() func)
         }
     }
 };
 
-CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
-    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {}
+CDSVWriter::CDSVWriter(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall) //constructor of CDSVWriter
+    : DImplementation(std::make_unique<SImplementation>(sink, delimiter, quoteall)) {} //DImp takes a unique pointer of type struct SImp
 
-CDSVWriter::~CDSVWriter() {}
+CDSVWriter::~CDSVWriter() {} //Decstructor
 
-bool CDSVWriter::WriteRow(const std::vector<std::string> &row) {
-    return DImplementation->WriteRow(row);
+bool CDSVWriter::WriteRow(const std::vector<std::string> &row) { //row as parameter
+    return DImplementation->WriteRow(row); //return row which is passed into WriteRow func()
 }
 
 

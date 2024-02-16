@@ -3,7 +3,7 @@
 struct CDSVWriter::SImplementation {
     std::shared_ptr<CDataSink> DSink; //shared pointer DSink of type CDataSink
     char DDelimiter;
-    bool DQuoteAll; //bool flag
+    bool DQuoteAll; //bool flag, if everything is in quotes or not
 
 //initializes above var's w provided args
     SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)

@@ -78,16 +78,26 @@ TEST(DSVWriter, Writerow){
     EXPECT_EQ(Sink->String(), "Hello&World!");
 }
 //case #2: NO
-// TEST(DSVWriter, WritefieldNewline){
-//     auto Sink = std::make_shared<CStringDataSink>();
-//     CDSVWriter Writer(Sink, ',');
-//     std::vector<std::string> input = {"Hello", "World!"};
+TEST(DSVWriter, WritefieldNewline){
+    auto Sink = std::make_shared<CStringDataSink>();
+    CDSVWriter Writer(Sink, ',');
+    std::vector<std::string> input = {"Hello", "World!"};
 
-//     EXPECT_TRUE(Writer.WriteRow(input));
-//     EXPECT_EQ(Sink->String(), "Hello,World!");
-//     EXPECT_TRUE(Writer.WriteRow(input));
-//     EXPECT_EQ(Sink->String(), "Hello,World!\nHello,World!");
-// }
+    EXPECT_TRUE(Writer.WriteRow(input));
+    EXPECT_EQ(Sink->String(), "Hello,World!");
+    EXPECT_TRUE(Writer.WriteRow(input));
+    EXPECT_EQ(Sink->String(), "Hello,World!\nHello,World!");
+}
+
+TEST(DSVWriter, DoubleQuoteIsDelimiter){
+    auto Sink = std::make_shared<CStringDataSink>();
+    CDSVWriter Writer(Sink, '"');
+    std::vector<std::string> input = {"Hello", "World!"};
+
+    EXPECT_TRUE(Writer.WriteRow(input));
+    EXPECT_EQ(Sink->String(), "Hello,World!");
+}
+    
 
 // TEST(DSVTest, WriteDoubleQuotationsWithDelimiter){
 //     auto Sink = std::make_shared<CStringDataSink>();
@@ -104,16 +114,6 @@ TEST(DSVWriter, Writerow){
 
 //WRITER TEST CASES
 
-
-// //& delimiter
-// TEST(DSVWriter, ExampleTest) {
-//     auto Sink = std::make_shared<CStringDataSink>();
-//     CDSVWriter Writer(Sink, '&');
-//     std::vector<std::string> input = {"Hello", "World!"};
-
-//     EXPECT_TRUE(Writer.WriteRow(input));
-//     EXPECT_EQ(Sink->String(), "Hello&World!"); 
-// }
 //, delimiter
 // TEST(DSVWriter, ExampleTestNewline) {
 //     auto Sink = std::make_shared<CStringDataSink>();
@@ -125,16 +125,5 @@ TEST(DSVWriter, Writerow){
 //     EXPECT_TRUE(Writer.WriteRow(input));
 //     EXPECT_EQ(Sink->String(), "Hello,World!\nHello,World!");
 // } 
-
-// TEST(DSVWriter, WriteDoubleQuotationsWithDelimiter) {
-//     auto Sink = std::make_shared<CStringDataSink>();
-//     CDSVWriter Writer(Sink, '&');
-//     std::vector<std::string> input = {"\"&\"&mystring\n"};
-
-//     EXPECT_TRUE(Writer.WriteRow(input));
-//     EXPECT_EQ(Sink->String(), "\"&\"&mystring");
-//     // OR:
-//     // EXPECT_EQ(Sink->String(), "\"&&mystring\"");
-// }
 
 

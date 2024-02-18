@@ -5,7 +5,7 @@ struct CDSVReader::SImplementation { //SImp is a struct inside class CDSVReader
     char DDelimiter;
 
 //The shared pointer src is pointing to the bas class CDataSource, so in the future 
-//it can point to any object of CDataSource
+//it can point to any object of CDataSource... pointing to an object of CDataSource
     SImplementation(std::shared_ptr<CDataSource> src, char delimiter) 
         : DSource(src), DDelimiter(delimiter) {} //initialized member funcs of struct SImp
 

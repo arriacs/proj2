@@ -7,27 +7,55 @@ struct CDSVWriter::SImplementation { //SImp = struct within CDSVWriter class
 
 //initializes above var's w provided args
     SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)
-        : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {}
+        : DSink(sink), DDelimiter(delimiter), DQuoteAll(quoteall) {} //the () are giving the vars initial vals
 
 //Writes row of data to data sink
-    bool WriteRow(const std::vector<std::string> &row) { //takes the row read from ReadRow
-        if (!DSink) { //if no class obj
+    // bool WriteRow(const std::vector<std::string> &row) { //takes the row read from ReadRow
+    //     if (!DSink) { //if no class obj
+    //         return false;
+    //     }
+
+    //     auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row' from ReadRow
+    //     if (it != row.end()) { //writing row to the sink Writefield
+    //         WriteField(*it); //if not at end of line, WriteField takes the it variable which contains the row string
+    //         ++it; //inc iterator
+    //     }
+
+    //     for (; it != row.end(); ++it) { //empty init statement, it has already been declared
+    //         DSink->Put(DDelimiter); //uses Put() to apply delim to input
+    //         WriteField(*it); //separating each field in the row
+    //     }
+
+    //     return true; //func was successful
+    // }
+    bool WriteRow(const std::vector<std::string> &row) {
+        if(!DSink){
             return false;
         }
-
-        auto it = row.begin(); //initializes iterator 'it' to beg of input vect 'row' from ReadRow
-        if (it != row.end()) { //writing row to the sink Writefield
-            WriteField(*it); //if not at end of line, WriteField takes the it variable which contains the row string
-            ++it; //inc iterator
+        for(const auto&value : row){
+            if(DQuoteAll || value.find_first_of(",\"\n") != std::string::npos){
+                DSink->Write({'"'}); 
+            
+                for(char ch : value){
+                    if(ch == '"'){
+                        DSink->Write({'"','"'});
+                    }
+                    DSink->Write({ch});
+                }
+                DSink->Write({'"'});
+            }
+        
+            else{
+                DSink->Write({value.begin(), value.end()});
+            }
+            if(&value != &row.back()){
+                DSink->Write({DDelimiter});
+            }
+        
         }
+        return true;
 
-        for (; it != row.end(); ++it) { //empty init statement, it has already been declared
-            DSink->Put(DDelimiter); //uses Put() to apply delim to input
-            WriteField(*it); //separating each field in the row
-        }
-
-        return true; //func was successful
-    }
+}
 
 private: //writes a single field (string) to data sink
     void WriteField(const std::string &field) { //refernce to field (actual object, not copy) //npos = position in the string

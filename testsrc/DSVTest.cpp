@@ -87,6 +87,8 @@ TEST(DSVWriter, Writerow){
     EXPECT_TRUE(Writer.WriteRow(input));
     EXPECT_EQ(Sink->String(), "Hello&World!");
 }
+
+
 //case #2: NO
 // TEST(DSVWriter, WritefieldNewline){
 //     auto Sink = std::make_shared<CStringDataSink>();

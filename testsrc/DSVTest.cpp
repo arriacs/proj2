@@ -80,8 +80,8 @@ TEST(DSVReader, Readrow_Newline2) {
 
 //Simplest case #1: & delimiter
 TEST(DSVWriter, Writerow){
-    auto Sink = std::make_shared<CStringDataSink>();
-    CDSVWriter Writer(Sink, '&');
+    auto Sink = std::make_shared<CStringDataSink>(); //Sink = shared pointer to CStringDataSink object
+    CDSVWriter Writer(Sink, '&'); //Writer = object of CDSVWriter class, taking in shared ptr and delim
     std::vector<std::string> input = {"Hello", "World!"};
 
     EXPECT_TRUE(Writer.WriteRow(input));

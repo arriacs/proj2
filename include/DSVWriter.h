@@ -9,7 +9,7 @@
 
 class CDSVWriter{
     private: //data members
-        struct SImplementation;
+        struct SImplementation; //forward declaration
         std::unique_ptr<SImplementation> DImplementation; //unique_ptr keeps track of object, where only 1 thing can 
         //point to implementation. Pointer is pointing to your actual code... user only knows that (can't see actual code)
 

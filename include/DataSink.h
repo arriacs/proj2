@@ -2,7 +2,7 @@
 #define DATASINK_H
 
 #include <vector>
-
+//Doesn't provide a func to check if smth is written to the sink
 class CDataSink{
     public:
         virtual ~CDataSink(){};

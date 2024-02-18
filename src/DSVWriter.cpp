@@ -1,9 +1,9 @@
 #include "DSVWriter.h"
-
-struct CDSVWriter::SImplementation {
+//SImp impl
+struct CDSVWriter::SImplementation { //SImp = struct within CDSVWriter class
     std::shared_ptr<CDataSink> DSink; //shared pointer DSink of type CDataSink
     char DDelimiter;
-    bool DQuoteAll; //bool flag, if everything is in quotes or 
+    bool DQuoteAll; //bool flag, if everything is in quotes or  
 
 //initializes above var's w provided args
     SImplementation(std::shared_ptr<CDataSink> sink, char delimiter, bool quoteall)

@@ -39,7 +39,7 @@ TEST(DSVReader, Readrow_Failure) {
     EXPECT_FALSE(Reader.ReadRow(output));
     ASSERT_EQ(output.size(), 0);  // No successful columns should be read
 }
-
+//Test Case 4: Newline with comma delim
 TEST(DSVReader, ReadRowNewlineTest){
     auto Source = std::make_shared<CStringDataSource>("abc\nhi,10");
     CDSVReader Reader(Source, ',');
@@ -56,31 +56,23 @@ TEST(DSVReader, ReadRowNewlineTest){
 
 }
 
-
-
-// // Test Case 4: Newlines
-// TEST(DSVReader, Readrow_Newline) {
-//     auto Source = std::make_shared<CStringDataSource>("Hello\nWorld");
-//     CDSVReader Reader(Source, ',');
-//     std::vector<std::string> output;
-
-//     EXPECT_TRUE(Reader.ReadRow(output));
-//     ASSERT_EQ(output.size(), 1);
-//     EXPECT_EQ(output[0], "World");
-// }
-
 //Test Case 5: More Newlines + Delimiter input
-// TEST(DSVReader, Readrow_Newline2) {
-//     auto Source = std::make_shared<CStringDataSource>("Name&ID\nPEGGY&100");
-//     CDSVReader Reader(Source, '&');
-//     std::vector<std::string> output;
+TEST(DSVReader, Readrow_Newline2) {
+    auto Source = std::make_shared<CStringDataSource>("Name&ID\nPEGGY&100");
+    CDSVReader Reader(Source, '&');
+    std::vector<std::string> output;
 
-// Second row/vector is the only one getting output
-//     EXPECT_TRUE(Reader.ReadRow(output));
-//     ASSERT_EQ(output.size(), 2);
-//     EXPECT_EQ(output[0], "PEGGY");
-//     EXPECT_EQ(output[1], "100");
-// }
+//Second row/vector is the only one getting output
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 2);
+    EXPECT_EQ(output[0], "Name");
+    EXPECT_EQ(output[1], "ID");
+
+    EXPECT_TRUE(Reader.ReadRow(output));
+    ASSERT_EQ(output.size(), 2);
+    EXPECT_EQ(output[0], "PEGGY");
+    EXPECT_EQ(output[1], "100");
+}
 
 
 
